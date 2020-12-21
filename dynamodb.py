@@ -16,7 +16,7 @@ SCAN_DT = SCAN_DT.strftime("%Y-%m-%d")
 def get_logs(cedl_project):
     items = []
     table = boto3.resource('dynamodb').Table('ProjectLog')
-    prj_folder = "/{}/".format(cedl_project)
+    prj_folder = "/{}/".format(xxx_project)
     resp = table.scan(FilterExpression= (c.Attr('source_file').contains(prj_folder) & c.Attr('execution_starttime').begins_with(SCAN_DT)))
     items.extend(resp['Items'])
     while 'LastEvaluatedKey' in resp:
@@ -41,7 +41,7 @@ def lambda_handler(event, context):
     file_list=[]
     for row in reader:
         file_list.append(row['file_name'])
-    log = get_logs(cedl_project)
+    log = get_logs(xxx_project)
     dynamo_file_list =[]
     dynamo_file_endtime = []
     
@@ -68,7 +68,7 @@ def lambda_handler(event, context):
                 not_executed_file.append(file.split(',')[1]) 
             
     num_expected = len(file_list)
-    email_notification.send_email_notifications(folder_nm, cedl_project, contact_detail_file, num_expected, found_file, not_found_file, not_executed_file)
+    email_notification.send_email_notifications(folder_nm, xxx_project, contact_detail_file, num_expected, found_file, not_found_file, not_executed_file)
     
     
     
